@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Impact — Darshit Rajyaguru</title>
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+.page-hero { padding:160px 5vw 80px; text-align:center; position:relative; }
+.page-hero-title { font-family:var(--font-display); font-size:clamp(2.5rem,5vw,4.5rem); font-weight:900; margin-bottom:16px; }
+.page-hero-title span { background:linear-gradient(135deg,var(--primary),var(--secondary),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; background-size:200%; animation:gradient-shift 3s linear infinite; }
+.page-breadcrumb { display:flex; justify-content:center; gap:8px; align-items:center; color:var(--text-dim); font-size:0.85rem; margin-bottom:20px; }
+.page-breadcrumb a { color:var(--text-muted); text-decoration:none; }
+
+/* AI Cards large */
+.ai-impact-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:32px; }
+.ai-impact-card { padding:44px 36px; border-radius:var(--radius-xl); transition:all .5s var(--transition); position:relative; overflow:hidden; }
+.ai-impact-card:hover { transform:translateY(-10px) scale(1.01); }
+.ai-impact-card::before { content:''; position:absolute; inset:-1px; border-radius:inherit; background:linear-gradient(135deg,rgba(0,102,255,0.2),transparent,rgba(0,255,204,0.1)); opacity:0; transition:opacity .4s; z-index:0; }
+.ai-impact-card:hover::before { opacity:1; }
+.ai-impact-card > * { position:relative; z-index:1; }
+.ai-card-icon { font-size:3rem; margin-bottom:20px; display:block; }
+.ai-card-title { font-family:var(--font-display); font-size:1.3rem; font-weight:700; margin-bottom:14px; }
+.ai-card-desc { font-size:0.95rem; color:var(--text-muted); line-height:1.8; margin-bottom:20px; }
+.ai-card-metric { display:inline-flex; align-items:center; gap:8px; padding:8px 18px; border-radius:50px; font-size:0.82rem; font-weight:700; }
+
+/* Timeline comparison */
+.before-after { display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:60px; }
+.ba-card { padding:36px; border-radius:var(--radius-xl); }
+.ba-title { font-family:var(--font-display); font-size:1rem; font-weight:700; margin-bottom:24px; display:flex; align-items:center; gap:10px; }
+.ba-list { list-style:none; display:flex; flex-direction:column; gap:12px; }
+.ba-list li { font-size:0.9rem; color:var(--text-muted); display:flex; align-items:flex-start; gap:10px; line-height:1.5; }
+.ba-list li .icon { flex-shrink:0; }
+
+/* Speed meter */
+.speed-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-top:60px; }
+.speed-card { padding:32px 20px; border-radius:var(--radius-lg); text-align:center; transition:all .4s; }
+.speed-card:hover { transform:translateY(-6px); }
+.speed-num { font-family:var(--font-display); font-size:2.5rem; font-weight:900; display:block; margin-bottom:8px; }
+.speed-label { font-size:0.82rem; color:var(--text-muted); }
+
+/* AI tools I use */
+.ai-tools-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+.ai-tool-card { padding:32px; border-radius:var(--radius-lg); transition:all .4s var(--transition); cursor:pointer; }
+.ai-tool-card:hover { transform:translateY(-6px) rotateX(3deg); }
+.ai-tool-icon { font-size:2rem; margin-bottom:16px; display:block; }
+.ai-tool-name { font-weight:700; margin-bottom:8px; }
+.ai-tool-use { font-size:0.85rem; color:var(--text-muted); line-height:1.6; }
+
+/* Pulsing orbs */
+.ai-hero-visual { position:relative; height:400px; display:flex; align-items:center; justify-content:center; }
+.pulse-orb { border-radius:50%; position:absolute; animation:orb-pulse 3s ease-in-out infinite; }
+.pulse-orb-1 { width:200px; height:200px; background:radial-gradient(circle at 40% 40%,rgba(0,102,255,0.6),rgba(0,102,255,0.1)); }
+.pulse-orb-2 { width:300px; height:300px; background:radial-gradient(circle at 60% 30%,rgba(123,47,255,0.3),transparent); animation-delay:-1s; }
+.pulse-orb-3 { width:380px; height:380px; background:radial-gradient(circle at 50% 70%,rgba(0,255,204,0.15),transparent); animation-delay:-2s; }
+.ai-core-text { z-index:2; text-align:center; }
+.ai-core-text span { font-family:var(--font-display); font-size:3.5rem; font-weight:900; background:linear-gradient(135deg,var(--primary),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+.neural-line { display:flex; justify-content:center; gap:0; flex-wrap:wrap; margin-top:20px; }
+.nl-dot { width:8px; height:8px; background:var(--primary); border-radius:50%; margin:4px; animation:nl-pulse 2s ease-in-out infinite; }
+.nl-dot:nth-child(odd) { animation-delay:-.5s; background:var(--accent); }
+.nl-dot:nth-child(3n) { animation-delay:-1s; background:var(--secondary); }
+@keyframes nl-pulse { 0%,100%{transform:scale(1);opacity:.5} 50%{transform:scale(1.6);opacity:1} }
+
+/* ── Responsive ── */
+@media(max-width:1024px){
+  .ai-impact-grid{gap:20px}
+  .speed-grid{grid-template-columns:repeat(2,1fr)}
+  .ai-tools-grid{grid-template-columns:repeat(2,1fr)}
+  .ai-impact-card{padding:32px 24px}
+  .ai-hero-visual{height:320px}
+  .pulse-orb-1{width:160px;height:160px}
+  .pulse-orb-2{width:240px;height:240px}
+  .pulse-orb-3{width:310px;height:310px}
+}
+@media(max-width:768px){
+  .page-hero{padding:110px 5vw 60px}
+  .ai-impact-grid{grid-template-columns:1fr;gap:16px}
+  .before-after{grid-template-columns:1fr;gap:16px}
+  .speed-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .ai-tools-grid{grid-template-columns:1fr;gap:14px}
+  .ai-hero-visual{height:260px}
+  .ba-card{padding:24px 20px}
+  .ai-card-title{font-size:1.1rem}
+}
+@media(max-width:480px){
+  .page-hero{padding:90px 16px 48px}
+  .page-hero-title{font-size:2rem}
+  .ai-hero-visual{height:220px}
+  .pulse-orb-1{width:120px;height:120px}
+  .pulse-orb-2{width:180px;height:180px}
+  .pulse-orb-3{width:220px;height:220px}
+  .ai-core-text span{font-size:2.2rem}
+  .ai-impact-card{padding:24px 18px}
+  .ai-card-icon{font-size:2.2rem;margin-bottom:14px}
+  .ai-card-title{font-size:1rem}
+  .ai-card-desc{font-size:.88rem}
+  .speed-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .speed-card{padding:22px 14px}
+  .speed-num{font-size:2rem}
+  .ai-tools-grid{gap:10px}
+  .ai-tool-card{padding:22px 16px}
+  .ba-card{padding:20px 16px}
+}
+@media(max-width:390px){
+  .page-hero{padding:80px 14px 40px}
+  .page-hero-title{font-size:1.8rem}
+  .speed-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="scroll-progress"></div>
+<canvas id="bg-canvas"></canvas>
+<div class="bg-blob" style="width:700px;height:700px;background:var(--primary);top:-300px;right:-300px"></div>
+<div class="bg-blob" style="width:500px;height:500px;background:var(--secondary);bottom:-100px;left:-200px;animation-delay:-4s"></div>
+
+<div class="page-wrapper">
+<nav class="navbar glass">
+  <a href="index.html" class="nav-logo">DR.</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="skills.html">Skills</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="ai.html" class="active">AI Impact</a></li>
+    <li><a href="contact.html" class="nav-cta">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div class="page-breadcrumb reveal"><a href="index.html">Home</a><span>/</span><span style="color:var(--primary)">AI Impact</span></div>
+  <h1 class="page-hero-title reveal">AI-<span>Powered</span><br/>Development</h1>
+  <p style="color:var(--text-muted);max-width:600px;margin:16px auto 0;line-height:1.7;font-size:1.05rem" class="reveal">
+    How artificial intelligence has transformed the way I build WordPress websites — faster delivery, smarter code, and better results for every client.
+  </p>
+</div>
+
+<!-- AI Orb Hero Visual -->
+<section style="padding:20px 5vw 80px">
+  <div class="section-inner">
+    <div class="ai-hero-visual reveal">
+      <div class="pulse-orb pulse-orb-3"></div>
+      <div class="pulse-orb pulse-orb-2"></div>
+      <div class="pulse-orb pulse-orb-1"></div>
+      <div class="ai-core-text">
+        <span>AI+WP</span>
+        <p style="color:var(--text-muted);font-size:1rem;margin-top:8px">The future of WordPress development</p>
+        <div class="neural-line">
+          <div class="nl-dot"></div><div class="nl-dot"></div><div class="nl-dot"></div>
+          <div class="nl-dot"></div><div class="nl-dot"></div><div class="nl-dot"></div>
+          <div class="nl-dot"></div><div class="nl-dot"></div><div class="nl-dot"></div>
+          <div class="nl-dot"></div><div class="nl-dot"></div><div class="nl-dot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Impact Cards -->
+<section style="padding:0 5vw 100px">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">Real Impact</span>
+      <h2 class="section-title">How AI Elevates My <span>Work</span></h2>
+      <p class="section-sub">AI isn't replacing developers — it's supercharging the ones who know how to use it. Here's how I leverage it.</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="ai-impact-grid">
+      <div class="ai-impact-card glass hover-swipe glow-blue reveal" data-tilt>
+        <span class="ai-card-icon">⚡</span>
+        <h3 class="ai-card-title">3x Faster Development</h3>
+        <p class="ai-card-desc">
+          AI-assisted code generation lets me scaffold boilerplate WordPress plugins and theme templates in minutes instead of hours. I use AI to handle repetitive patterns — then I add the expert logic on top.
+          <br/><br/>
+          What used to take a full day now takes a morning. That means faster deliveries, more iterations, and better value for every client.
+        </p>
+        <div class="ai-card-metric" style="background:rgba(0,102,255,0.1);border:1px solid rgba(0,102,255,0.2);color:var(--primary)">
+          <i class="fa-solid fa-bolt"></i> Dev Speed: +3x improvement
+        </div>
+      </div>
+
+      <div class="ai-impact-card glass glow-purple reveal" data-tilt style="transition-delay:.1s">
+        <span class="ai-card-icon">🐛</span>
+        <h3 class="ai-card-title">AI-Powered Debugging</h3>
+        <p class="ai-card-desc">
+          Complex PHP conflicts and obscure WordPress hooks that once took hours to debug are now traced in minutes. I describe the symptom, get a diagnosis, verify it, and ship the fix — all within a single workflow session.
+          <br/><br/>
+          AI acts as a second pair of eyes that never gets tired, never misses a variable scope issue, and always checks the docs.
+        </p>
+        <div class="ai-card-metric" style="background:rgba(123,47,255,0.1);border:1px solid rgba(123,47,255,0.2);color:var(--secondary)">
+          <i class="fa-solid fa-bug"></i> Bug Resolution: -70% time
+        </div>
+      </div>
+
+      <div class="ai-impact-card glass glow-cyan reveal" data-tilt style="transition-delay:.2s">
+        <span class="ai-card-icon">✍️</span>
+        <h3 class="ai-card-title">Smarter Content Strategy</h3>
+        <p class="ai-card-desc">
+          Beyond code, AI helps me craft better page structures, write conversion-focused copy drafts, and create SEO-optimized content outlines for clients — giving them more value from every project.
+          <br/><br/>
+          I combine my WordPress technical expertise with AI content intelligence to deliver truly complete website solutions.
+        </p>
+        <div class="ai-card-metric" style="background:rgba(0,255,204,0.08);border:1px solid rgba(0,255,204,0.2);color:var(--accent)">
+          <i class="fa-solid fa-chart-line"></i> Content ROI: +40% avg
+        </div>
+      </div>
+
+      <div class="ai-impact-card glass reveal" data-tilt style="transition-delay:.3s">
+        <span class="ai-card-icon">🔍</span>
+        <h3 class="ai-card-title">Automated Code Review</h3>
+        <p class="ai-card-desc">
+          Before shipping, every piece of code goes through an AI security scan and best-practices review. SQL injection risks, XSS vulnerabilities, nonce verification — AI catches what tired eyes miss.
+          <br/><br/>
+          The result: cleaner, more secure WordPress code that follows WordPress Coding Standards by default.
+        </p>
+        <div class="ai-card-metric" style="background:rgba(0,102,255,0.1);border:1px solid rgba(0,102,255,0.2);color:var(--primary)">
+          <i class="fa-solid fa-shield-halved"></i> Security Issues: -85%
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Before / After -->
+<section style="padding:0 5vw 100px">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">Transformation</span>
+      <h2 class="section-title">Before AI <span>vs After</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="before-after">
+      <div class="ba-card glass reveal-left" style="border:1px solid rgba(255,80,80,0.2);background:rgba(255,50,50,0.04)">
+        <div class="ba-title" style="color:#ff6b6b">
+          <i class="fa-solid fa-times-circle"></i> Before AI
+        </div>
+        <ul class="ba-list">
+          <li><span class="icon">🐌</span>Boilerplate plugin setup: 3–4 hours</li>
+          <li><span class="icon">🔎</span>Bug hunting: 2–6 hours per complex issue</li>
+          <li><span class="icon">📝</span>Writing documentation: 1–2 hours per plugin</li>
+          <li><span class="icon">🔒</span>Security review: manual, error-prone</li>
+          <li><span class="icon">💡</span>Architecture decisions: solo brainstorming</li>
+          <li><span class="icon">🌐</span>REST API integration: trial and error</li>
+          <li><span class="icon">🧪</span>Test cases: often skipped under deadline</li>
+        </ul>
+      </div>
+      <div class="ba-card glass reveal-right" style="border:1px solid rgba(0,255,204,0.2);background:rgba(0,255,204,0.03)">
+        <div class="ba-title" style="color:var(--accent)">
+          <i class="fa-solid fa-check-circle"></i> With AI
+        </div>
+        <ul class="ba-list">
+          <li><span class="icon">⚡</span>Boilerplate plugin setup: 20 minutes</li>
+          <li><span class="icon">🤖</span>Bug hunting: AI-assisted diagnosis, minutes</li>
+          <li><span class="icon">✨</span>Documentation: auto-generated + refined</li>
+          <li><span class="icon">🛡️</span>Security: automated scan before every push</li>
+          <li><span class="icon">💬</span>Architecture: AI as a senior dev sounding board</li>
+          <li><span class="icon">🔗</span>REST API: schema-first with AI type inference</li>
+          <li><span class="icon">✅</span>Test cases: generated alongside the code</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Speed Metrics -->
+<section style="padding:0 5vw 100px">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">By the Numbers</span>
+      <h2 class="section-title">Measurable <span>Gains</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="speed-grid">
+      <div class="speed-card glass glow-blue reveal" data-tilt>
+        <span class="speed-num count-up" style="color:var(--primary)" data-count="3" data-suffix="x">0x</span>
+        <div class="speed-label">Faster Development<br/>Delivery</div>
+      </div>
+      <div class="speed-card glass glow-purple reveal" data-tilt style="transition-delay:.1s">
+        <span class="speed-num count-up" style="color:var(--secondary)" data-count="70" data-suffix="%">0%</span>
+        <div class="speed-label">Reduction in<br/>Debug Time</div>
+      </div>
+      <div class="speed-card glass glow-cyan reveal" data-tilt style="transition-delay:.2s">
+        <span class="speed-num count-up" style="color:var(--accent)" data-count="85" data-suffix="%">0%</span>
+        <div class="speed-label">Fewer Security<br/>Vulnerabilities</div>
+      </div>
+      <div class="speed-card glass reveal" data-tilt style="transition-delay:.3s">
+        <span class="speed-num count-up" style="color:var(--primary)" data-count="40" data-suffix="%">0%</span>
+        <div class="speed-label">Better Client<br/>Content Outcomes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI Tools I Use -->
+<section style="padding:0 5vw 100px">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">My AI Stack</span>
+      <h2 class="section-title">Tools I <span>Use Daily</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="ai-tools-grid">
+      <div class="ai-tool-card glass glow-blue reveal" data-tilt>
+        <span class="ai-tool-icon">🤖</span>
+        <div class="ai-tool-name">Claude (Anthropic)</div>
+        <p class="ai-tool-use">Code review, architecture brainstorming, plugin documentation, complex debugging sessions, and WordPress hook explanations.</p>
+      </div>
+      <div class="ai-tool-card glass reveal" data-tilt style="transition-delay:.1s">
+        <span class="ai-tool-icon">💻</span>
+        <div class="ai-tool-name">GitHub Copilot</div>
+        <p class="ai-tool-use">In-editor autocomplete for PHP, JavaScript, and CSS. Dramatically speeds up repetitive WordPress patterns and boilerplate code.</p>
+      </div>
+      <div class="ai-tool-card glass reveal" data-tilt style="transition-delay:.2s">
+        <span class="ai-tool-icon">🔍</span>
+        <div class="ai-tool-name">AI SEO Tools</div>
+        <p class="ai-tool-use">Content strategy, meta optimization, keyword clustering, and structured data generation for client WordPress sites.</p>
+      </div>
+      <div class="ai-tool-card glass glow-purple reveal" data-tilt style="transition-delay:.3s">
+        <span class="ai-tool-icon">🎨</span>
+        <div class="ai-tool-name">AI Image Generation</div>
+        <p class="ai-tool-use">Rapid placeholder imagery, hero section concepts, and icon generation for rapid prototyping during the design phase.</p>
+      </div>
+      <div class="ai-tool-card glass reveal" data-tilt style="transition-delay:.4s">
+        <span class="ai-tool-icon">📊</span>
+        <div class="ai-tool-name">AI Analytics Interpretation</div>
+        <p class="ai-tool-use">Making sense of Google Analytics data, Core Web Vitals reports, and performance metrics for actionable client recommendations.</p>
+      </div>
+      <div class="ai-tool-card glass glow-cyan reveal" data-tilt style="transition-delay:.5s">
+        <span class="ai-tool-icon">🔐</span>
+        <div class="ai-tool-name">AI Security Scanning</div>
+        <p class="ai-tool-use">Automated vulnerability scanning for every plugin I ship — catching OWASP issues before they reach production WordPress installs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI Philosophy + CTA -->
+<section style="padding:0 5vw 40px">
+  <div class="section-inner">
+    <div class="glass hover-swipe" data-tilt style="padding:64px;border-radius:var(--radius-xl);text-align:center;max-width:800px;margin:0 auto;position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,102,255,0.10) 0%,transparent 70%);pointer-events:none"></div>
+      <div class="reveal" style="position:relative;z-index:1">
+        <span style="font-size:3rem;display:block;margin-bottom:24px">🧠</span>
+        <h2 style="font-family:var(--font-display);font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:20px">My AI Philosophy</h2>
+        <p style="color:var(--text-muted);line-height:1.9;font-size:1.05rem;margin-bottom:32px">
+          AI is the most powerful amplifier in a developer's toolkit — but it only amplifies what's already there. I bring 5+ years of WordPress expertise, deep knowledge of hooks and architecture, and the judgment to know when the AI is right and when it's wrong.<br/><br/>
+          <strong style="color:var(--text-main)">I don't let AI replace thinking — I let it accelerate it.</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-box reveal">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h2>Ready to ship faster and smarter with <span>AI-augmented WordPress?</span></h2>
+      <p>Get the speed of AI tooling backed by real WordPress expertise — Core Contributor quality, every project.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="contact.html" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> Work With Me</a>
+      <a href="projects.html" class="btn btn-glass"><i class="fa-solid fa-folder-open"></i> See Projects</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">DR.</a>
+    <div class="footer-links">
+      <a href="index.html">Home</a><a href="about.html">About</a>
+      <a href="skills.html">Skills</a><a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="social-links">
+      <a href="https://wordpress.org/support/users/darshitrajyaguru97/" class="social-link glass" target="_blank">
+        <i class="fab fa-wordpress" style="color:var(--primary)"></i>
+      </a>
+      <a href="mailto:darshitrajyaguru@gmail.com" class="social-link glass">
+        <i class="fa-solid fa-envelope" style="color:var(--accent)"></i>
+      </a>
+    </div>
+  </div>
+  <p class="footer-copy">© 2025 Darshit Rajyaguru · WordPress Expert & Core Contributor</p>
+</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

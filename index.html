@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Darshit Rajyaguru — WordPress Expert & Core Contributor</title>
+<meta name="description" content="WordPress Expert & Core Contributor with 5+ years building premium websites that convert." />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+/* ── Hero extra ── */
+.hero-typed-label { font-size:1.1rem; color:var(--text-muted); margin-bottom:4px; }
+.typed-cursor-bar {
+  display:inline-block; width:3px; height:1.1em;
+  background:var(--accent); margin-left:2px;
+  animation:blink .75s step-end infinite; vertical-align:middle;
+}
+@keyframes blink { 50%{opacity:0} }
+
+/* ── Services Strip ── */
+.services-strip {
+  padding:60px 5vw;
+  overflow:hidden;
+}
+.services-scroll {
+  display:flex; gap:20px;
+  animation:scroll-strip 25s linear infinite;
+  width:max-content;
+}
+.services-scroll:hover { animation-play-state:paused; }
+@keyframes scroll-strip {
+  from{transform:translateX(0)} to{transform:translateX(-50%)}
+}
+.service-chip {
+  padding:14px 28px; border-radius:50px; white-space:nowrap;
+  display:flex; align-items:center; gap:10px;
+  font-size:0.9rem; font-weight:600;
+}
+.service-chip i { color:var(--primary); }
+
+/* ── Stats Row ── */
+.stats-row {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:24px;
+  padding:80px 5vw;
+}
+.stat-block { padding:36px 24px; border-radius:var(--radius-lg); text-align:center; }
+.stat-block-num {
+  font-family:var(--font-display); font-size:3rem; font-weight:900;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  display:block; margin-bottom:8px;
+}
+.stat-block-label { color:var(--text-muted); font-size:0.9rem; letter-spacing:0.5px; }
+
+/* ── Featured project ── */
+.featured-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+
+/* ── CTA Banner ── */
+.cta-banner {
+  margin:0 5vw 100px;
+  padding:70px 60px;
+  border-radius:var(--radius-xl);
+  display:flex; justify-content:space-between; align-items:center;
+  background:linear-gradient(135deg,rgba(0,102,255,0.15),rgba(123,47,255,0.1));
+  gap:40px; flex-wrap:wrap;
+}
+.cta-banner h2 {
+  font-family:var(--font-display); font-size:clamp(1.5rem,2.5vw,2.2rem);
+  font-weight:700; max-width:500px;
+}
+.cta-banner h2 span {
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+
+/* ── WP Contribution ── */
+.wp-section { padding:100px 5vw; }
+.wp-inner { max-width:1200px; margin:0 auto; }
+.wp-release-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:16px; margin-top:40px; }
+.wp-release-badge {
+  padding:16px 12px; border-radius:var(--radius-md); text-align:center;
+  font-size:0.8rem; font-weight:600; color:var(--text-muted);
+  transition:all .3s;
+}
+.wp-release-badge:hover { transform:translateY(-4px); color:var(--primary); border-color:var(--primary); box-shadow:0 4px 16px var(--primary-glow); }
+.wp-release-badge span { display:block; font-size:1.2rem; margin-bottom:6px; }
+/* ── Responsive ── */
+@media(max-width:1024px){
+  .stats-row{grid-template-columns:repeat(2,1fr);padding:60px 5vw}
+  .featured-grid{grid-template-columns:repeat(2,1fr)}
+  .wp-release-grid{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:768px){
+  .stats-row{grid-template-columns:repeat(2,1fr);gap:16px;padding:48px 5vw}
+  .featured-grid{grid-template-columns:1fr}
+  .wp-release-grid{grid-template-columns:repeat(3,1fr)}
+  .wp-section{padding:64px 5vw}
+}
+@media(max-width:480px){
+  .stats-row{grid-template-columns:repeat(2,1fr);gap:12px;padding:36px 16px}
+  .stat-block{padding:24px 16px}
+  .stat-block-num{font-size:2.2rem}
+  .featured-grid{grid-template-columns:1fr}
+  .wp-release-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .wp-section{padding:48px 16px}
+  .services-strip{padding:32px 0}
+}
+@media(max-width:360px){
+  .stats-row{grid-template-columns:1fr}
+  .wp-release-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- Scroll Progress -->
+<div id="scroll-progress"></div>
+
+<!-- Three.js Canvas -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- BG Blobs -->
+<div class="bg-blob" style="width:600px;height:600px;background:var(--primary);top:-200px;right:-200px;"></div>
+<div class="bg-blob" style="width:500px;height:500px;background:var(--secondary);bottom:100px;left:-150px;animation-delay:-4s"></div>
+
+<div class="page-wrapper">
+
+<!-- ── Navigation ────────────────────────────────────────── -->
+<nav class="navbar glass">
+  <a href="index.html" class="nav-logo">DR.</a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="skills.html">Skills</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="ai.html">AI Impact</a></li>
+    <li><a href="contact.html" class="nav-cta">Contact</a></li>
+  </ul>
+  <button class="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ── Hero ──────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-grid">
+    <!-- Left -->
+    <div class="hero-content">
+      <div class="hero-badge reveal">
+        <span class="dot"></span>
+        Available for Projects
+      </div>
+      <h1 class="hero-title reveal">
+        Hi, I'm<br/>
+        <span class="name-highlight">Darshit<br/>Rajyaguru</span>
+      </h1>
+      <p class="hero-typed reveal">
+        <span style="color:var(--text-muted)">I'm a </span>
+        <span class="typed-role role-text"></span><span class="typed-cursor-bar"></span>
+      </p>
+      <p class="hero-desc reveal">
+        Building WordPress websites that look <strong>premium</strong> and convert with confidence.
+        From custom plugins to enterprise-grade performance — I craft digital experiences that deliver results.
+      </p>
+      <div class="hero-actions reveal">
+        <a href="projects.html" class="btn btn-primary">
+          <i class="fa-solid fa-folder-open"></i> View My Work
+        </a>
+        <a href="contact.html" class="btn btn-glass">
+          <i class="fa-solid fa-paper-plane"></i> Get In Touch
+        </a>
+      </div>
+    </div>
+
+    <!-- Right — 3D Card -->
+    <div class="hero-visual">
+      <div class="orbit-ring orbit-1 parallax-layer" data-parallax="-0.06">
+        <div class="orbit-dot"></div>
+        <div class="orbit-dot orbit-dot-2"></div>
+      </div>
+      <div class="orbit-ring orbit-2 parallax-layer" data-parallax="-0.04"></div>
+
+      <div class="hero-card-3d glass glow-blue" data-tilt>
+        <div class="hero-card-inner">
+          <div>
+            <div class="avatar-ring">
+              <div class="avatar-img">DR</div>
+            </div>
+            <div style="text-align:center">
+              <p style="font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:4px">Darshit Rajyaguru</p>
+              <p style="font-size:0.82rem;color:var(--text-muted)">WordPress Expert & Core Contributor</p>
+              <div style="display:flex;justify-content:center;gap:8px;margin:12px 0">
+                <span style="padding:3px 10px;border-radius:50px;background:rgba(0,255,204,0.1);border:1px solid rgba(0,255,204,0.2);font-size:0.7rem;color:var(--accent)">&#x2714; Available</span>
+                <span style="padding:3px 10px;border-radius:50px;background:rgba(0,102,255,0.1);border:1px solid rgba(0,102,255,0.2);font-size:0.7rem;color:var(--primary)">WP Contributor</span>
+              </div>
+            </div>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-pill">
+              <span class="stat-num">5+</span>
+              <span class="stat-label">Years Exp</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-num">30+</span>
+              <span class="stat-label">Sites Built</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-num">12</span>
+              <span class="stat-label">WP Credits</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-num">11</span>
+              <span class="stat-label">WP Badges</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating tags -->
+      <div class="float-tag" style="top:-20px;right:20px">
+        <i class="fab fa-wordpress"></i> WP 6.9.4 Contributor
+      </div>
+      <div class="float-tag" style="bottom:40px;left:-30px">
+        <i class="fa-solid fa-bolt"></i> Performance First
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Scrolling Services Strip ───────────────────────────── -->
+<div class="services-strip">
+  <div class="services-scroll">
+    <!-- duplicate for seamless loop -->
+    <div class="service-chip glass"><i class="fab fa-wordpress"></i>Custom WordPress Builds</div>
+    <div class="service-chip glass"><i class="fa-brands fa-woocommerce"></i>WooCommerce Stores</div>
+    <div class="service-chip glass"><i class="fa-solid fa-plug"></i>Plugin Development</div>
+    <div class="service-chip glass"><i class="fa-solid fa-gauge-high"></i>Performance Optimization</div>
+    <div class="service-chip glass"><i class="fa-solid fa-search"></i>Technical SEO</div>
+    <div class="service-chip glass"><i class="fa-solid fa-code"></i>API Integrations</div>
+    <div class="service-chip glass"><i class="fa-solid fa-palette"></i>Elementor Design</div>
+    <div class="service-chip glass"><i class="fa-solid fa-robot"></i>AI-Enhanced Dev</div>
+    <div class="service-chip glass"><i class="fab fa-wordpress"></i>Custom WordPress Builds</div>
+    <div class="service-chip glass"><i class="fa-brands fa-woocommerce"></i>WooCommerce Stores</div>
+    <div class="service-chip glass"><i class="fa-solid fa-plug"></i>Plugin Development</div>
+    <div class="service-chip glass"><i class="fa-solid fa-gauge-high"></i>Performance Optimization</div>
+    <div class="service-chip glass"><i class="fa-solid fa-search"></i>Technical SEO</div>
+    <div class="service-chip glass"><i class="fa-solid fa-code"></i>API Integrations</div>
+    <div class="service-chip glass"><i class="fa-solid fa-palette"></i>Elementor Design</div>
+    <div class="service-chip glass"><i class="fa-solid fa-robot"></i>AI-Enhanced Dev</div>
+  </div>
+</div>
+
+<!-- ── Stats Row ──────────────────────────────────────────── -->
+<div class="stats-row" style="max-width:1200px;margin:0 auto">
+  <div class="stat-block glass reveal" data-tilt>
+    <span class="stat-block-num count-up" data-count="5" data-suffix="+">0+</span>
+    <span class="stat-block-label">Years of Experience</span>
+  </div>
+  <div class="stat-block glass reveal" data-tilt style="transition-delay:.1s">
+    <span class="stat-block-num count-up" data-count="30" data-suffix="+">0+</span>
+    <span class="stat-block-label">Custom Websites Built</span>
+  </div>
+  <div class="stat-block glass reveal" data-tilt style="transition-delay:.2s">
+    <span class="stat-block-num count-up" data-count="12">0</span>
+    <span class="stat-block-label">WordPress Release Credits</span>
+  </div>
+  <div class="stat-block glass reveal" data-tilt style="transition-delay:.3s">
+    <span class="stat-block-num count-up" data-count="11">0</span>
+    <span class="stat-block-label">WordPress.org Badges</span>
+  </div>
+</div>
+
+<!-- ── Featured Projects ──────────────────────────────────── -->
+<section>
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">Portfolio</span>
+      <h2 class="section-title">Featured <span>Projects</span></h2>
+      <p class="section-sub">A curated selection of builds that showcase premium design and high-converting functionality.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="featured-grid">
+      <div class="project-card glass hover-swipe reveal" data-tilt data-category="wordpress">
+        <div class="project-thumb">
+          <div class="project-thumb-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+          <div class="project-thumb-overlay"></div>
+          <span class="project-tag glass" style="color:var(--accent)">Plugin</span>
+        </div>
+        <div class="project-body">
+          <h3 class="project-title">Contact Form to API</h3>
+          <p class="project-desc">Custom WordPress plugin bridging Contact Form 7 with external APIs + WooCommerce cart integration for seamless lead capture.</p>
+          <div class="project-tech">
+            <span class="tech-tag">WordPress</span>
+            <span class="tech-tag">PHP</span>
+            <span class="tech-tag">WooCommerce</span>
+          </div>
+          <div class="project-links">
+            <a href="projects.html" class="project-link glass btn-glass">
+              <i class="fa-solid fa-arrow-right"></i> Details
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card glass reveal" data-tilt data-category="wordpress" style="transition-delay:.1s">
+        <div class="project-thumb" style="background:linear-gradient(135deg,var(--bg-mid),rgba(123,47,255,0.1))">
+          <div class="project-thumb-icon"><i class="fa-solid fa-building"></i></div>
+          <div class="project-thumb-overlay"></div>
+          <span class="project-tag glass" style="color:var(--secondary)">Enterprise</span>
+        </div>
+        <div class="project-body">
+          <h3 class="project-title">iDalko</h3>
+          <p class="project-desc">Full enterprise WordPress rebuild featuring a custom mega-menu, multilingual support, and performance-optimized architecture.</p>
+          <div class="project-tech">
+            <span class="tech-tag">WordPress</span>
+            <span class="tech-tag">Elementor</span>
+            <span class="tech-tag">WPML</span>
+          </div>
+          <div class="project-links">
+            <a href="projects.html" class="project-link glass btn-glass">
+              <i class="fa-solid fa-arrow-right"></i> Details
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card glass reveal" data-tilt data-category="wordpress" style="transition-delay:.2s">
+        <div class="project-thumb" style="background:linear-gradient(135deg,var(--bg-mid),rgba(0,255,204,0.08))">
+          <div class="project-thumb-icon"><i class="fa-solid fa-briefcase"></i></div>
+          <div class="project-thumb-overlay"></div>
+          <span class="project-tag glass" style="color:var(--primary)">Recruitment</span>
+        </div>
+        <div class="project-body">
+          <h3 class="project-title">Standby24</h3>
+          <p class="project-desc">Recruitment platform with dynamic content structures, custom post types, and advanced filtering for candidate/job matching.</p>
+          <div class="project-tech">
+            <span class="tech-tag">WordPress</span>
+            <span class="tech-tag">ACF</span>
+            <span class="tech-tag">Custom PHP</span>
+          </div>
+          <div class="project-links">
+            <a href="projects.html" class="project-link glass btn-glass">
+              <i class="fa-solid fa-arrow-right"></i> Details
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:48px">
+      <a href="projects.html" class="btn btn-glass reveal">
+        <i class="fa-solid fa-grid-2"></i> View All Projects
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── WordPress Core Contributions ──────────────────────── -->
+<div class="wp-section">
+  <div class="wp-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">Open Source</span>
+      <h2 class="section-title">WordPress <span>Core Contributions</span></h2>
+      <p class="section-sub">Proud contributor to WordPress from 6.3 through 6.9.4 — verified on my public WordPress.org profile.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="wp-release-grid">
+      <div class="wp-release-badge glass reveal"><span>🔷</span>WP 6.3</div>
+      <div class="wp-release-badge glass reveal" style="transition-delay:.05s"><span>🔷</span>WP 6.4</div>
+      <div class="wp-release-badge glass reveal" style="transition-delay:.1s"><span>🔷</span>WP 6.5</div>
+      <div class="wp-release-badge glass reveal" style="transition-delay:.15s"><span>🔷</span>WP 6.6</div>
+      <div class="wp-release-badge glass reveal" style="transition-delay:.2s"><span>🔷</span>WP 6.7</div>
+      <div class="wp-release-badge glass reveal" style="transition-delay:.25s"><span>⭐</span>WP 6.8</div>
+      <div class="wp-release-badge glass reveal" style="transition-delay:.3s"><span>⭐</span>WP 6.9</div>
+      <div class="wp-release-badge glass reveal" style="transition-delay:.35s"><span>⭐</span>WP 6.9.1</div>
+      <div class="wp-release-badge glass reveal" style="transition-delay:.4s"><span>⭐</span>WP 6.9.2</div>
+      <div class="wp-release-badge glass reveal" style="transition-delay:.45s"><span>⭐</span>WP 6.9.3</div>
+      <div class="wp-release-badge glass reveal" style="transition-delay:.5s"><span>🏆</span>WP 6.9.4</div>
+      <div class="wp-release-badge glass reveal" style="transition-delay:.55s;background:rgba(0,255,204,0.06);border-color:rgba(0,255,204,0.2)"><span>🎯</span>11 Badges</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CTA ──────────────────────────────────────────────────── -->
+<div class="cta-box reveal">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h2>Ready to build something <span>extraordinary?</span></h2>
+      <p>Let's turn your idea into a premium WordPress experience that converts visitors into customers.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="contact.html" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> Start a Project</a>
+      <a href="about.html"   class="btn btn-glass"><i class="fa-solid fa-user"></i> About Me</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── Footer ─────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">DR.</a>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="skills.html">Skills</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="social-links">
+      <a href="https://wordpress.org/support/users/darshitrajyaguru97/" class="social-link glass glow-blue" target="_blank" title="WordPress.org">
+        <i class="fab fa-wordpress" style="color:var(--primary)"></i>
+      </a>
+      <a href="mailto:darshitrajyaguru@gmail.com" class="social-link glass" title="Email">
+        <i class="fa-solid fa-envelope" style="color:var(--accent)"></i>
+      </a>
+    </div>
+  </div>
+  <p class="footer-copy">© 2025 Darshit Rajyaguru · Crafted with precision & passion · WordPress Expert & Core Contributor</p>
+</footer>
+
+</div><!-- /page-wrapper -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

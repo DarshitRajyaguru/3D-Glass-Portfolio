@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Projects — Darshit Rajyaguru</title>
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+.page-hero { padding:160px 5vw 80px; text-align:center; }
+.page-hero-title { font-family:var(--font-display); font-size:clamp(2.5rem,5vw,4.5rem); font-weight:900; margin-bottom:16px; }
+.page-hero-title span { background:linear-gradient(135deg,var(--primary),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.page-breadcrumb { display:flex; justify-content:center; gap:8px; align-items:center; color:var(--text-dim); font-size:0.85rem; margin-bottom:20px; }
+.page-breadcrumb a { color:var(--text-muted); text-decoration:none; }
+.page-breadcrumb a:hover { color:var(--primary); }
+
+.projects-masonry { columns:3; gap:24px; margin-top:10px; }
+.project-card-v2 {
+  break-inside:avoid; margin-bottom:24px;
+  border-radius:var(--radius-lg); overflow:hidden;
+  transition:transform .5s var(--transition), box-shadow .5s;
+  transform-style:preserve-3d; cursor:none;
+  display:block;
+}
+.project-card-v2:hover {
+  transform:translateY(-10px) rotateX(2deg);
+  box-shadow:0 30px 60px rgba(0,0,0,.5),0 0 40px var(--primary-glow);
+}
+.proj-img {
+  width:100%; aspect-ratio:16/9;
+  display:flex; align-items:center; justify-content:center;
+  font-size:5rem; position:relative; overflow:hidden;
+}
+.proj-img-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,transparent 30%,rgba(3,3,15,.95) 100%);
+}
+.proj-body { padding:28px; }
+.proj-type { font-size:0.7rem; text-transform:uppercase; letter-spacing:2px; font-weight:700; margin-bottom:10px; }
+.proj-title { font-family:var(--font-display); font-size:1.05rem; font-weight:700; margin-bottom:10px; }
+.proj-desc { font-size:0.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:18px; }
+.proj-highlights { list-style:none; margin-bottom:18px; display:flex; flex-direction:column; gap:6px; }
+.proj-highlights li { font-size:0.82rem; color:var(--text-muted); display:flex; align-items:flex-start; gap:8px; }
+.proj-highlights li::before { content:'▸'; color:var(--primary); flex-shrink:0; margin-top:1px; }
+.proj-tags { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+.proj-actions { display:flex; gap:10px; }
+
+/* Featured badge */
+.feat-badge { position:absolute; top:16px; left:16px; padding:5px 12px; border-radius:50px; font-size:0.68rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; z-index:2; }
+
+/* Stats banner */
+.proj-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:60px; }
+.proj-stat { padding:28px; border-radius:var(--radius-md); text-align:center; }
+.proj-stat-num { font-family:var(--font-display); font-size:2.5rem; font-weight:900; color:var(--accent); display:block; }
+.proj-stat-label { font-size:0.82rem; color:var(--text-muted); margin-top:4px; }
+
+/* Process section */
+.process-steps { display:grid; grid-template-columns:repeat(5,1fr); gap:16px; margin-top:40px; position:relative; }
+.process-steps::before { content:''; position:absolute; top:36px; left:10%; right:10%; height:2px; background:linear-gradient(90deg,var(--primary),var(--accent)); z-index:0; }
+.process-step { padding:28px 16px; border-radius:var(--radius-md); text-align:center; position:relative; z-index:1; }
+.process-num { font-family:var(--font-display); font-size:1.5rem; font-weight:900; color:var(--primary); margin-bottom:12px; display:block; }
+.process-title { font-weight:700; font-size:0.85rem; margin-bottom:8px; }
+.process-desc { font-size:0.78rem; color:var(--text-muted); line-height:1.5; }
+
+/* ── Responsive ── */
+@media(max-width:1024px){
+  .projects-masonry{columns:2;gap:18px}
+  .process-steps{grid-template-columns:repeat(3,1fr)}
+  .process-steps::before{display:none}
+  .proj-stats{gap:12px}
+}
+@media(max-width:768px){
+  .page-hero{padding:110px 5vw 60px}
+  .projects-masonry{columns:1}
+  .proj-stats{grid-template-columns:repeat(3,1fr);gap:12px}
+  .proj-stat{padding:20px 14px}
+  .proj-stat-num{font-size:2rem}
+  .process-steps{grid-template-columns:repeat(2,1fr)}
+  .proj-body{padding:20px}
+}
+@media(max-width:600px){
+  .proj-stats{grid-template-columns:1fr;gap:12px}
+  .process-steps{grid-template-columns:repeat(2,1fr);gap:12px}
+}
+@media(max-width:480px){
+  .page-hero{padding:90px 16px 48px}
+  .page-hero-title{font-size:2rem}
+  .projects-masonry{columns:1;gap:14px}
+  .proj-body{padding:16px}
+  .proj-title{font-size:.92rem}
+  .proj-stats{grid-template-columns:1fr}
+  .process-steps{grid-template-columns:1fr;gap:10px}
+  .process-step{padding:20px 14px}
+  .project-filters{gap:6px}
+  .filter-btn{padding:7px 14px;font-size:.78rem}
+}
+@media(max-width:390px){
+  .page-hero{padding:80px 14px 40px}
+  .page-hero-title{font-size:1.8rem}
+}
+</style>
+</head>
+<body>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="scroll-progress"></div>
+<canvas id="bg-canvas"></canvas>
+<div class="bg-blob" style="width:600px;height:600px;background:var(--secondary);top:-200px;right:-200px"></div>
+<div class="bg-blob" style="width:450px;height:450px;background:var(--primary);bottom:0;left:-200px;animation-delay:-3s"></div>
+
+<div class="page-wrapper">
+<nav class="navbar glass">
+  <a href="index.html" class="nav-logo">DR.</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="skills.html">Skills</a></li>
+    <li><a href="projects.html" class="active">Projects</a></li>
+    <li><a href="ai.html">AI Impact</a></li>
+    <li><a href="contact.html" class="nav-cta">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div class="page-breadcrumb reveal"><a href="index.html">Home</a><span>/</span><span style="color:var(--primary)">Projects</span></div>
+  <h1 class="page-hero-title reveal">My <span>Projects</span></h1>
+  <p style="color:var(--text-muted);max-width:560px;margin:16px auto 0;line-height:1.7" class="reveal">
+    A portfolio of real-world WordPress builds — from enterprise rebuilds to custom plugins — each crafted for maximum performance and impact.
+  </p>
+</div>
+
+<section style="padding:40px 5vw 100px">
+  <div class="section-inner">
+
+    <!-- Filters -->
+    <div class="project-filters reveal">
+      <button class="filter-btn active" data-filter="all">All Projects</button>
+      <button class="filter-btn" data-filter="wordpress">WordPress</button>
+      <button class="filter-btn" data-filter="plugin">Plugins</button>
+      <button class="filter-btn" data-filter="ecommerce">eCommerce</button>
+      <button class="filter-btn" data-filter="enterprise">Enterprise</button>
+    </div>
+
+    <!-- Masonry Grid -->
+    <div class="projects-masonry">
+
+      <!-- Contact Form to API -->
+      <div class="project-card-v2 glass hover-swipe project-card reveal" data-category="plugin" data-tilt>
+        <div class="proj-img" style="background:linear-gradient(135deg,#0a1a3e,rgba(0,102,255,0.2))">
+          <span style="position:relative;z-index:1">📧</span>
+          <div class="proj-img-overlay"></div>
+          <div class="feat-badge glass" style="color:var(--accent);border:1px solid rgba(0,255,204,0.2)">⭐ Featured Plugin</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-type" style="color:var(--primary)">WordPress Plugin</div>
+          <h3 class="proj-title">Contact Form to API</h3>
+          <p class="proj-desc">A custom WordPress plugin bridging Contact Form 7 with external APIs, automating lead capture and routing data directly into WooCommerce cart workflows.</p>
+          <ul class="proj-highlights">
+            <li>CF7 → External API data bridge with error handling</li>
+            <li>WooCommerce cart integration for product auto-add</li>
+            <li>Admin panel for API key management & logs</li>
+            <li>SMTP fallback with custom email notifications</li>
+          </ul>
+          <div class="proj-tags">
+            <span class="tech-tag">WordPress</span>
+            <span class="tech-tag">PHP</span>
+            <span class="tech-tag">CF7</span>
+            <span class="tech-tag">WooCommerce</span>
+            <span class="tech-tag">REST API</span>
+          </div>
+          <div class="proj-actions">
+            <a href="contact.html" class="btn btn-glass" style="font-size:.82rem;padding:8px 18px">
+              <i class="fa-solid fa-message"></i> Enquire
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- iDalko -->
+      <div class="project-card-v2 glass hover-swipe project-card reveal" data-category="enterprise" data-tilt style="transition-delay:.1s">
+        <div class="proj-img" style="background:linear-gradient(135deg,#1a0a3e,rgba(123,47,255,0.2))">
+          <span style="position:relative;z-index:1">🏢</span>
+          <div class="proj-img-overlay"></div>
+          <div class="feat-badge glass" style="color:var(--secondary);border:1px solid rgba(123,47,255,0.2)">🏆 Enterprise</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-type" style="color:var(--secondary)">Enterprise WordPress</div>
+          <h3 class="proj-title">iDalko — Enterprise Rebuild</h3>
+          <p class="proj-desc">Full enterprise WordPress rebuild featuring a custom mega-menu system, multilingual support via WPML, and performance-optimized page architecture.</p>
+          <ul class="proj-highlights">
+            <li>Custom mega-menu with animated dropdowns</li>
+            <li>WPML multilingual setup with RTL support</li>
+            <li>LCP under 2.5s — passed all Core Web Vitals</li>
+            <li>Custom CPTs for services, case studies & team</li>
+          </ul>
+          <div class="proj-tags">
+            <span class="tech-tag">WordPress</span>
+            <span class="tech-tag">Elementor</span>
+            <span class="tech-tag">WPML</span>
+            <span class="tech-tag">ACF</span>
+            <span class="tech-tag">Custom PHP</span>
+          </div>
+          <div class="proj-actions">
+            <a href="contact.html" class="btn btn-glass" style="font-size:.82rem;padding:8px 18px">
+              <i class="fa-solid fa-message"></i> Enquire
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Standby24 -->
+      <div class="project-card-v2 glass hover-swipe project-card reveal" data-category="wordpress" data-tilt style="transition-delay:.2s">
+        <div class="proj-img" style="background:linear-gradient(135deg,#0a1a2e,rgba(0,255,204,0.1))">
+          <span style="position:relative;z-index:1">💼</span>
+          <div class="proj-img-overlay"></div>
+          <div class="feat-badge glass" style="color:var(--primary);border:1px solid rgba(0,102,255,0.2)">🎯 Dynamic</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-type" style="color:var(--accent)">Recruitment Platform</div>
+          <h3 class="proj-title">Standby24 — Recruitment Portal</h3>
+          <p class="proj-desc">Full-featured recruitment website with dynamic content structures, advanced job/candidate filtering, and automated email notification workflows.</p>
+          <ul class="proj-highlights">
+            <li>Custom Job Listing CPT with dynamic filtering</li>
+            <li>Candidate application tracking system</li>
+            <li>Automated email sequences via SMTP hooks</li>
+            <li>Admin dashboard with application analytics</li>
+          </ul>
+          <div class="proj-tags">
+            <span class="tech-tag">WordPress</span>
+            <span class="tech-tag">ACF</span>
+            <span class="tech-tag">Custom PHP</span>
+            <span class="tech-tag">SMTP</span>
+          </div>
+          <div class="proj-actions">
+            <a href="contact.html" class="btn btn-glass" style="font-size:.82rem;padding:8px 18px">
+              <i class="fa-solid fa-message"></i> Enquire
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- WooCommerce Custom Store -->
+      <div class="project-card-v2 glass hover-swipe project-card reveal" data-category="ecommerce" data-tilt style="transition-delay:.15s">
+        <div class="proj-img" style="background:linear-gradient(135deg,#1a1a0a,rgba(255,165,0,0.1));height:160px">
+          <span style="position:relative;z-index:1">🛒</span>
+          <div class="proj-img-overlay"></div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-type" style="color:var(--accent)">WooCommerce</div>
+          <h3 class="proj-title">Custom WooCommerce Store</h3>
+          <p class="proj-desc">Subscription-based product store with custom payment gateway integration and automated order fulfillment workflows.</p>
+          <div class="proj-tags">
+            <span class="tech-tag">WooCommerce</span>
+            <span class="tech-tag">Stripe</span>
+            <span class="tech-tag">Subscriptions</span>
+          </div>
+          <div class="proj-actions">
+            <a href="contact.html" class="btn btn-glass" style="font-size:.82rem;padding:8px 18px">
+              <i class="fa-solid fa-message"></i> Enquire
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Project -->
+      <div class="project-card-v2 glass hover-swipe project-card reveal" data-category="wordpress" data-tilt style="transition-delay:.25s">
+        <div class="proj-img" style="background:linear-gradient(135deg,#0a2a1a,rgba(0,255,100,0.1));height:160px">
+          <span style="position:relative;z-index:1">⚡</span>
+          <div class="proj-img-overlay"></div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-type" style="color:var(--primary)">Performance Audit</div>
+          <h3 class="proj-title">WordPress Speed Optimization</h3>
+          <p class="proj-desc">Full performance audit and optimization: 40+ point Core Web Vitals improvement, CDN setup, critical CSS delivery and image optimization pipeline.</p>
+          <div class="proj-tags">
+            <span class="tech-tag">Core Web Vitals</span>
+            <span class="tech-tag">Caching</span>
+            <span class="tech-tag">CDN</span>
+          </div>
+          <div class="proj-actions">
+            <a href="contact.html" class="btn btn-glass" style="font-size:.82rem;padding:8px 18px">
+              <i class="fa-solid fa-message"></i> Enquire
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service Business -->
+      <div class="project-card-v2 glass hover-swipe project-card reveal" data-category="wordpress" data-tilt style="transition-delay:.3s">
+        <div class="proj-img" style="background:linear-gradient(135deg,#1a0a2a,rgba(180,0,255,0.1));height:160px">
+          <span style="position:relative;z-index:1">🌟</span>
+          <div class="proj-img-overlay"></div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-type" style="color:var(--secondary)">Service Business</div>
+          <h3 class="proj-title">Premium Service Landing Site</h3>
+          <p class="proj-desc">High-converting service business website with custom booking integration, testimonial management, and lead capture funnels.</p>
+          <div class="proj-tags">
+            <span class="tech-tag">WordPress</span>
+            <span class="tech-tag">Elementor</span>
+            <span class="tech-tag">Booking</span>
+          </div>
+          <div class="proj-actions">
+            <a href="contact.html" class="btn btn-glass" style="font-size:.82rem;padding:8px 18px">
+              <i class="fa-solid fa-message"></i> Enquire
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /masonry -->
+
+    <!-- Project Stats -->
+    <div class="proj-stats" style="margin-top:80px">
+      <div class="proj-stat glass reveal" data-tilt>
+        <span class="proj-stat-num count-up" data-count="30" data-suffix="+">0+</span>
+        <div class="proj-stat-label">Completed Projects</div>
+      </div>
+      <div class="proj-stat glass reveal" data-tilt style="transition-delay:.1s">
+        <span class="proj-stat-num count-up" data-count="100" data-suffix="%">0%</span>
+        <div class="proj-stat-label">Client Satisfaction</div>
+      </div>
+      <div class="proj-stat glass reveal" data-tilt style="transition-delay:.2s">
+        <span class="proj-stat-num count-up" data-count="5" data-suffix="+">0+</span>
+        <div class="proj-stat-label">Industry Verticals</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Process Section -->
+<section style="padding:0 5vw 100px">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">How I Work</span>
+      <h2 class="section-title">My Development <span>Process</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="process-steps">
+      <div class="process-step glass reveal" data-tilt>
+        <span class="process-num">01</span>
+        <h3 class="process-title">Discovery</h3>
+        <p class="process-desc">Deep-dive into your goals, audience, and technical requirements before touching a line of code.</p>
+      </div>
+      <div class="process-step glass reveal" data-tilt style="transition-delay:.1s">
+        <span class="process-num" style="color:var(--secondary)">02</span>
+        <h3 class="process-title">Architecture</h3>
+        <p class="process-desc">Plan the technical stack, data structures, and plugin architecture for scalability.</p>
+      </div>
+      <div class="process-step glass reveal" data-tilt style="transition-delay:.2s">
+        <span class="process-num" style="color:var(--accent)">03</span>
+        <h3 class="process-title">Build</h3>
+        <p class="process-desc">Clean, documented PHP and JavaScript — built to WordPress coding standards.</p>
+      </div>
+      <div class="process-step glass reveal" data-tilt style="transition-delay:.3s">
+        <span class="process-num">04</span>
+        <h3 class="process-title">Optimize</h3>
+        <p class="process-desc">Core Web Vitals tuning, caching configuration, and accessibility review.</p>
+      </div>
+      <div class="process-step glass reveal" data-tilt style="transition-delay:.4s">
+        <span class="process-num" style="color:var(--secondary)">05</span>
+        <h3 class="process-title">Launch & Support</h3>
+        <p class="process-desc">Staged deployment, client training, and ongoing maintenance support.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-box reveal">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h2>Have a project in mind? Let's make it <span>reality.</span></h2>
+      <p>Tell me what you need and I'll give you a clear scope, timeline, and honest quote — no fluff.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="contact.html" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> Start Project</a>
+      <a href="skills.html"  class="btn btn-glass"><i class="fa-solid fa-chart-bar"></i> My Skills</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">DR.</a>
+    <div class="footer-links">
+      <a href="index.html">Home</a><a href="about.html">About</a>
+      <a href="skills.html">Skills</a><a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="social-links">
+      <a href="https://wordpress.org/support/users/darshitrajyaguru97/" class="social-link glass" target="_blank">
+        <i class="fab fa-wordpress" style="color:var(--primary)"></i>
+      </a>
+      <a href="mailto:darshitrajyaguru@gmail.com" class="social-link glass">
+        <i class="fa-solid fa-envelope" style="color:var(--accent)"></i>
+      </a>
+    </div>
+  </div>
+  <p class="footer-copy">© 2025 Darshit Rajyaguru · WordPress Expert & Core Contributor</p>
+</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

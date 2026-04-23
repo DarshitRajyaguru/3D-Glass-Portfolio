@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About — Darshit Rajyaguru</title>
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+.page-hero { padding:160px 5vw 80px; text-align:center; position:relative; }
+.page-hero-title { font-family:var(--font-display); font-size:clamp(2.5rem,5vw,4.5rem); font-weight:900; margin-bottom:16px; }
+.page-hero-title span { background:linear-gradient(135deg,var(--primary),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.page-breadcrumb { display:flex; justify-content:center; gap:8px; align-items:center; color:var(--text-dim); font-size:0.85rem; }
+.page-breadcrumb a { color:var(--text-muted); text-decoration:none; }
+.page-breadcrumb a:hover { color:var(--primary); }
+.page-breadcrumb span { color:var(--text-dim); }
+
+.values-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:60px; }
+.value-card { padding:36px 28px; border-radius:var(--radius-lg); text-align:center; transition:all .4s var(--transition); }
+.value-card:hover { transform:translateY(-8px); }
+.value-icon { font-size:2.5rem; margin-bottom:20px; display:block; }
+.value-title { font-family:var(--font-display); font-size:0.95rem; font-weight:700; margin-bottom:12px; color:var(--text-main); }
+.value-desc { font-size:0.88rem; color:var(--text-muted); line-height:1.7; }
+
+.story-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; }
+.story-text p { color:var(--text-muted); line-height:1.85; margin-bottom:20px; font-size:1rem; }
+.story-text p strong { color:var(--text-main); }
+
+.wp-contributions { padding:100px 5vw; }
+.contrib-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:40px; }
+.contrib-card { padding:32px; border-radius:var(--radius-lg); text-align:center; transition:all .4s var(--transition); }
+.contrib-card:hover { transform:translateY(-6px) scale(1.01); }
+.contrib-num { font-family:var(--font-display); font-size:3rem; font-weight:900; display:block; margin-bottom:8px; }
+.contrib-label { font-size:0.85rem; color:var(--text-muted); }
+
+.hobbies-row { display:flex; gap:16px; flex-wrap:wrap; margin-top:40px; }
+.hobby-chip { padding:12px 24px; border-radius:50px; display:flex; align-items:center; gap:10px; font-size:0.9rem; font-weight:500; }
+
+/* ── Responsive ── */
+.page-hero { padding:160px 5vw 80px; text-align:center; position:relative; }
+@media(max-width:1024px){
+  .values-grid{grid-template-columns:repeat(2,1fr)}
+  .story-grid{gap:48px}
+  .contrib-grid{grid-template-columns:repeat(3,1fr)}
+  .wp-contributions{padding:64px 5vw}
+}
+@media(max-width:768px){
+  .page-hero{padding:110px 5vw 60px}
+  .values-grid{grid-template-columns:1fr}
+  .story-grid{grid-template-columns:1fr;gap:40px}
+  .contrib-grid{grid-template-columns:repeat(3,1fr)}
+  .hobbies-row{gap:10px}
+  .hobby-chip{padding:10px 18px;font-size:.84rem}
+}
+@media(max-width:480px){
+  .page-hero{padding:90px 16px 48px}
+  .page-hero-title{font-size:2rem}
+  .values-grid{grid-template-columns:1fr;gap:14px}
+  .value-card{padding:24px 18px}
+  .value-icon{font-size:2rem;margin-bottom:14px}
+  .contrib-grid{grid-template-columns:1fr;gap:14px}
+  .contrib-card{padding:24px 18px}
+  .contrib-num{font-size:2.4rem}
+  .story-grid{gap:32px}
+  .story-text p{font-size:.92rem}
+  .wp-contributions{padding:40px 16px}
+}
+@media(max-width:390px){
+  .page-hero{padding:80px 14px 40px}
+  .page-hero-title{font-size:1.8rem}
+  .contrib-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="scroll-progress"></div>
+<canvas id="bg-canvas"></canvas>
+<div class="bg-blob" style="width:500px;height:500px;background:var(--secondary);top:-100px;left:-200px"></div>
+<div class="bg-blob" style="width:400px;height:400px;background:var(--primary);bottom:-100px;right:-150px;animation-delay:-6s"></div>
+
+<div class="page-wrapper">
+
+<nav class="navbar glass">
+  <a href="index.html" class="nav-logo">DR.</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="skills.html">Skills</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="ai.html">AI Impact</a></li>
+    <li><a href="contact.html" class="nav-cta">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="page-breadcrumb reveal" style="margin-bottom:20px">
+    <a href="index.html">Home</a><span>/</span><span style="color:var(--primary)">About</span>
+  </div>
+  <h1 class="page-hero-title reveal">About <span>Me</span></h1>
+  <p style="color:var(--text-muted);max-width:560px;margin:16px auto 0;line-height:1.7" class="reveal">
+    A passionate WordPress developer, open-source contributor, and lifelong learner obsessed with building the web's best experiences.
+  </p>
+</div>
+
+<!-- About Grid -->
+<section style="padding:40px 5vw 100px">
+  <div class="section-inner">
+    <div class="about-grid">
+      <!-- Image / Visual side -->
+      <div class="about-image-wrap reveal-left">
+        <div class="about-hexagon" style="animation:spin-ring 10s linear infinite">
+          <div class="about-hexagon-inner" style="font-size:3rem">DR</div>
+        </div>
+        <div class="about-badges">
+          <div class="badge-pill glass glow-blue" style="color:var(--primary)">
+            <i class="fab fa-wordpress"></i> WP Core Contributor
+          </div>
+          <div class="badge-pill glass glow-cyan" style="color:var(--accent)">
+            <i class="fa-solid fa-certificate"></i> 11 WP Badges
+          </div>
+          <div class="badge-pill glass glow-purple" style="color:var(--secondary)">
+            <i class="fa-solid fa-rocket"></i> 5+ Years
+          </div>
+        </div>
+      </div>
+
+      <!-- Text side -->
+      <div class="about-info reveal-right">
+        <p class="about-intro">
+          Hey! I'm <strong>Darshit Rajyaguru</strong> — a WordPress Expert and proud <strong>Core Contributor</strong> to the WordPress project. Over the past 5+ years, I've helped businesses of all sizes transform their digital presence with custom WordPress solutions.
+        </p>
+        <p class="about-intro">
+          My journey started with a simple curiosity about how websites work, which quickly evolved into a deep passion for <strong>building premium web experiences</strong>. Today, I specialize in custom WordPress builds, WooCommerce stores, performance optimization, and plugin development.
+        </p>
+        <p class="about-intro">
+          Beyond client work, I actively contribute to the <strong>WordPress open-source community</strong> — I have 12 release credits spanning WordPress 6.3 through 6.9.4, and 11 earned badges on my public WordPress.org profile.
+        </p>
+
+        <div class="info-grid">
+          <div class="info-card glass">
+            <span class="info-card-label">Location</span>
+            <span class="info-card-value"><i class="fa-solid fa-location-dot" style="color:var(--primary);margin-right:6px"></i>India</span>
+          </div>
+          <div class="info-card glass">
+            <span class="info-card-label">Availability</span>
+            <span class="info-card-value" style="color:var(--accent)">✓ Open to Projects</span>
+          </div>
+          <div class="info-card glass">
+            <span class="info-card-label">Focus</span>
+            <span class="info-card-value">WordPress & Web Dev</span>
+          </div>
+          <div class="info-card glass">
+            <span class="info-card-label">Contact</span>
+            <span class="info-card-value" style="font-size:0.85rem">darshitrajyaguru@gmail.com</span>
+          </div>
+        </div>
+
+        <div style="margin-top:28px;display:flex;gap:16px;flex-wrap:wrap">
+          <a href="contact.html" class="btn btn-primary">
+            <i class="fa-solid fa-paper-plane"></i> Let's Talk
+          </a>
+          <a href="https://wordpress.org/support/users/darshitrajyaguru97/" target="_blank" class="btn btn-glass">
+            <i class="fab fa-wordpress"></i> WP.org Profile
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Story + Timeline -->
+<section style="padding:0 5vw 100px">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">My Journey</span>
+      <h2 class="section-title">The <span>Story</span> So Far</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="story-grid">
+      <div class="story-text reveal-left">
+        <p>It started with a curiosity — <strong>how does the web actually work?</strong> That question led me down a path that would consume years of late nights, countless experiments, and an ever-growing love for building things that actually <em>help people</em>.</p>
+        <p>My first real WordPress project was a simple business site. But as I dug deeper — into PHP hooks, custom post types, the block editor, REST API — I realized WordPress wasn't just a CMS. <strong>It was a platform</strong>.</p>
+        <p>Contributing to WordPress Core felt like a natural next step. Getting my first release credit was a milestone that reminded me: the tools we use every day are built by people just like us. I became one of those people — 12 times over.</p>
+        <p>Today, I blend <strong>classic WordPress craftsmanship with AI-powered workflows</strong> to deliver results faster, smarter, and with more impact than ever before. The next chapter? Even bigger.</p>
+
+        <div class="hobbies-row">
+          <div class="hobby-chip glass"><i class="fa-solid fa-code" style="color:var(--primary)"></i>Open Source</div>
+          <div class="hobby-chip glass"><i class="fa-solid fa-brain" style="color:var(--secondary)"></i>AI Tools</div>
+          <div class="hobby-chip glass"><i class="fa-solid fa-bolt" style="color:var(--accent)"></i>Performance</div>
+          <div class="hobby-chip glass"><i class="fa-solid fa-users" style="color:var(--primary)"></i>Community</div>
+        </div>
+      </div>
+
+      <div class="reveal-right">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2019 — The Beginning</div>
+            <h4 class="timeline-title">First WordPress Project</h4>
+            <p class="timeline-desc">Built a local business website. Fell in love with PHP, hooks, and the endless customizability of WordPress.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--secondary);box-shadow:0 0 12px var(--secondary)"></div>
+            <div class="timeline-date" style="color:var(--secondary)">2020–2021</div>
+            <h4 class="timeline-title">Plugin Development & WooCommerce</h4>
+            <p class="timeline-desc">Mastered custom plugin architecture, WooCommerce hooks, and payment integrations. Built 10+ stores for clients globally.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--accent);box-shadow:0 0 12px var(--accent)"></div>
+            <div class="timeline-date" style="color:var(--accent)">2022</div>
+            <h4 class="timeline-title">WordPress Core Contributor — WP 6.3</h4>
+            <p class="timeline-desc">Earned first official WordPress.org release credit with WordPress 6.3. A milestone in the open-source journey.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2023–2024</div>
+            <h4 class="timeline-title">Enterprise Builds & Performance</h4>
+            <p class="timeline-desc">Delivered enterprise-grade projects including iDalko mega-menu rebuild and Standby24 recruitment platform. Focused heavily on Core Web Vitals.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--secondary);box-shadow:0 0 12px var(--secondary)"></div>
+            <div class="timeline-date" style="color:var(--secondary)">2025 — Now</div>
+            <h4 class="timeline-title">AI-Enhanced Development</h4>
+            <p class="timeline-desc">Integrating AI workflows into WordPress development. 12 release credits, 11 badges, and still building faster than ever.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Core Values -->
+<section style="padding:0 5vw 100px">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">What Drives Me</span>
+      <h2 class="section-title">Core <span>Values</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="values-grid">
+      <div class="value-card glass hover-swipe glow-blue reveal" data-tilt>
+        <span class="value-icon">⚡</span>
+        <h3 class="value-title">Performance First</h3>
+        <p class="value-desc">Every millisecond matters. I obsess over Core Web Vitals, caching strategies, and lean code that loads blazing fast.</p>
+      </div>
+      <div class="value-card glass glow-purple reveal" data-tilt style="transition-delay:.1s">
+        <span class="value-icon">🎨</span>
+        <h3 class="value-title">Premium Design</h3>
+        <p class="value-desc">Beauty isn't cosmetic — it's strategic. I build sites that look premium because premium converts. Every pixel is intentional.</p>
+      </div>
+      <div class="value-card glass glow-cyan reveal" data-tilt style="transition-delay:.2s">
+        <span class="value-icon">🤝</span>
+        <h3 class="value-title">Client Partnership</h3>
+        <p class="value-desc">I don't just build websites — I build long-term relationships. Clear communication and client success are non-negotiables.</p>
+      </div>
+      <div class="value-card glass reveal" data-tilt style="transition-delay:.3s">
+        <span class="value-icon">🔓</span>
+        <h3 class="value-title">Open Source</h3>
+        <p class="value-desc">Contributing back to WordPress Core isn't just a line on a résumé — it's a commitment to the platform that powers the web.</p>
+      </div>
+      <div class="value-card glass reveal" data-tilt style="transition-delay:.4s">
+        <span class="value-icon">🤖</span>
+        <h3 class="value-title">AI-Augmented</h3>
+        <p class="value-desc">I leverage AI tools to work smarter: faster debugging, better code quality, and more time spent on the creative work that matters.</p>
+      </div>
+      <div class="value-card glass reveal" data-tilt style="transition-delay:.5s">
+        <span class="value-icon">📈</span>
+        <h3 class="value-title">Results Driven</h3>
+        <p class="value-desc">Websites aren't art projects — they're business tools. I measure success by traffic, conversions, and client growth.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contribution Numbers -->
+<div class="wp-contributions">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">WordPress.org</span>
+      <h2 class="section-title">Community <span>Contributions</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="contrib-grid">
+      <div class="contrib-card glass glow-blue reveal" data-tilt>
+        <span class="contrib-num count-up" style="color:var(--primary)" data-count="12">0</span>
+        <span class="contrib-label">Official Release Credits<br/>(WP 6.3 → 6.9.4)</span>
+      </div>
+      <div class="contrib-card glass glow-purple reveal" data-tilt style="transition-delay:.1s">
+        <span class="contrib-num count-up" style="color:var(--secondary)" data-count="11">0</span>
+        <span class="contrib-label">Earned WordPress.org Badges</span>
+      </div>
+      <div class="contrib-card glass glow-cyan reveal" data-tilt style="transition-delay:.2s">
+        <span class="contrib-num count-up" style="color:var(--accent)" data-count="30" data-suffix="+">0+</span>
+        <span class="contrib-label">Custom Websites Delivered</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cta-box reveal">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h2>Ready to work together? Let's build something <span>remarkable.</span></h2>
+      <p>5+ years of WordPress expertise, 12 core credits, AI-powered workflows — all working for your project.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="contact.html" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> Start a Project</a>
+      <a href="skills.html"  class="btn btn-glass"><i class="fa-solid fa-chart-bar"></i> View My Skills</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">DR.</a>
+    <div class="footer-links">
+      <a href="index.html">Home</a><a href="about.html">About</a>
+      <a href="skills.html">Skills</a><a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="social-links">
+      <a href="https://wordpress.org/support/users/darshitrajyaguru97/" class="social-link glass" target="_blank">
+        <i class="fab fa-wordpress" style="color:var(--primary)"></i>
+      </a>
+      <a href="mailto:darshitrajyaguru@gmail.com" class="social-link glass">
+        <i class="fa-solid fa-envelope" style="color:var(--accent)"></i>
+      </a>
+    </div>
+  </div>
+  <p class="footer-copy">© 2025 Darshit Rajyaguru · WordPress Expert & Core Contributor</p>
+</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

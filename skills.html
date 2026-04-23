@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Skills — Darshit Rajyaguru</title>
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+.page-hero { padding:160px 5vw 80px; text-align:center; }
+.page-hero-title { font-family:var(--font-display); font-size:clamp(2.5rem,5vw,4.5rem); font-weight:900; margin-bottom:16px; }
+.page-hero-title span { background:linear-gradient(135deg,var(--primary),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.page-breadcrumb { display:flex; justify-content:center; gap:8px; align-items:center; color:var(--text-dim); font-size:0.85rem; margin-bottom:20px; }
+.page-breadcrumb a { color:var(--text-muted); text-decoration:none; }
+.page-breadcrumb a:hover { color:var(--primary); }
+
+/* Radar-like skill display */
+.mastery-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:60px; align-items:start; margin-top:60px; }
+.mastery-left, .mastery-right { display:flex; flex-direction:column; gap:24px; }
+.mastery-item { padding:28px; border-radius:var(--radius-md); transition:all .4s var(--transition); }
+.mastery-item:hover { transform:translateX(8px); }
+.mastery-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+.mastery-name { font-weight:700; display:flex; align-items:center; gap:10px; }
+.mastery-name i { color:var(--primary); width:20px; text-align:center; }
+.mastery-pct { font-family:var(--font-display); font-size:0.9rem; font-weight:700; color:var(--accent); }
+.mastery-bar { height:8px; background:rgba(255,255,255,0.06); border-radius:8px; overflow:hidden; }
+.mastery-fill { height:100%; border-radius:8px; width:0%; transition:width 1.5s cubic-bezier(.19,1,.22,1); position:relative; overflow:hidden; }
+.mastery-fill::after { content:''; position:absolute; top:0; right:0; bottom:0; width:50px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4)); animation:shimmer 2s infinite; }
+@keyframes shimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(200%)} }
+.mastery-sub { font-size:0.78rem; color:var(--text-dim); margin-top:6px; }
+
+/* Tools grid */
+.tools-mega { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-top:60px; }
+.tool-card { padding:28px 20px; border-radius:var(--radius-md); text-align:center; transition:all .4s var(--transition); cursor:pointer; }
+.tool-card:hover { transform:translateY(-8px) rotateZ(-1deg); box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 30px var(--primary-glow); }
+.tool-icon { font-size:2.2rem; margin-bottom:14px; display:block; }
+.tool-name { font-weight:700; font-size:0.9rem; margin-bottom:6px; }
+.tool-level { font-size:0.72rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; }
+.tool-level-badge { display:inline-block; padding:3px 10px; border-radius:50px; font-size:0.68rem; font-weight:700; letter-spacing:1px; margin-top:8px; }
+
+/* Soft skills */
+.soft-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:60px; }
+.soft-card { padding:32px 24px; border-radius:var(--radius-lg); text-align:center; transition:all .4s var(--transition); }
+.soft-card:hover { transform:translateY(-6px); }
+.soft-icon { font-size:2rem; margin-bottom:14px; display:block; }
+.soft-title { font-weight:700; margin-bottom:8px; }
+.soft-desc { font-size:0.85rem; color:var(--text-muted); line-height:1.6; }
+
+/* ── Responsive ── */
+@media(max-width:1024px){
+  .tools-mega{grid-template-columns:repeat(3,1fr)}
+  .mastery-grid{gap:36px}
+}
+@media(max-width:768px){
+  .page-hero{padding:110px 5vw 60px}
+  .mastery-grid{grid-template-columns:1fr;gap:24px;margin-top:40px}
+  .tools-mega{grid-template-columns:repeat(2,1fr);gap:14px}
+  .soft-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .mastery-item{padding:20px}
+}
+@media(max-width:600px){
+  .soft-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .page-hero{padding:90px 16px 48px}
+  .page-hero-title{font-size:2rem}
+  .mastery-grid{gap:16px}
+  .mastery-item{padding:18px}
+  .mastery-name{font-size:.88rem}
+  .tools-mega{grid-template-columns:repeat(2,1fr);gap:10px}
+  .tool-card{padding:20px 14px}
+  .tool-icon{font-size:1.8rem;margin-bottom:10px}
+  .tool-name{font-size:.82rem}
+  .soft-grid{grid-template-columns:1fr;gap:12px}
+  .soft-card{padding:22px 16px}
+}
+@media(max-width:390px){
+  .page-hero{padding:80px 14px 40px}
+  .page-hero-title{font-size:1.8rem}
+  .tools-mega{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="scroll-progress"></div>
+<canvas id="bg-canvas"></canvas>
+<div class="bg-blob" style="width:600px;height:600px;background:var(--primary);top:-200px;right:-200px"></div>
+<div class="bg-blob" style="width:400px;height:400px;background:var(--accent);bottom:-100px;left:-150px;animation-delay:-5s"></div>
+
+<div class="page-wrapper">
+<nav class="navbar glass">
+  <a href="index.html" class="nav-logo">DR.</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="skills.html" class="active">Skills</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="ai.html">AI Impact</a></li>
+    <li><a href="contact.html" class="nav-cta">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div class="page-breadcrumb reveal">
+    <a href="index.html">Home</a><span>/</span><span style="color:var(--primary)">Skills</span>
+  </div>
+  <h1 class="page-hero-title reveal">Technical <span>Skills</span></h1>
+  <p style="color:var(--text-muted);max-width:560px;margin:16px auto 0;line-height:1.7" class="reveal">
+    5+ years of hands-on WordPress mastery — from PHP hooks to performance optimization, plugin architecture to AI-enhanced workflows.
+  </p>
+</div>
+
+<!-- Core Skill Bars -->
+<section style="padding:40px 5vw 100px">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">Expertise Level</span>
+      <h2 class="section-title">Core <span>Competencies</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="mastery-grid">
+      <div class="mastery-left">
+        <div class="mastery-item glass reveal">
+          <div class="mastery-header">
+            <span class="mastery-name"><i class="fab fa-wordpress"></i>WordPress Development</span>
+            <span class="mastery-pct">98%</span>
+          </div>
+          <div class="mastery-bar"><div class="mastery-fill skill-bar-fill" data-width="98%" style="background:linear-gradient(90deg,var(--primary),var(--accent))"></div></div>
+          <p class="mastery-sub">Custom themes, plugins, blocks, hooks, filters — the full WordPress ecosystem</p>
+        </div>
+        <div class="mastery-item glass reveal" style="transition-delay:.1s">
+          <div class="mastery-header">
+            <span class="mastery-name"><i class="fab fa-php"></i>PHP</span>
+            <span class="mastery-pct">90%</span>
+          </div>
+          <div class="mastery-bar"><div class="mastery-fill skill-bar-fill" data-width="90%" style="background:linear-gradient(90deg,var(--secondary),var(--primary))"></div></div>
+          <p class="mastery-sub">OOP PHP, custom REST endpoints, WordPress plugin architecture</p>
+        </div>
+        <div class="mastery-item glass reveal" style="transition-delay:.2s">
+          <div class="mastery-header">
+            <span class="mastery-name"><i class="fab fa-woocommerce"></i>WooCommerce</span>
+            <span class="mastery-pct">92%</span>
+          </div>
+          <div class="mastery-bar"><div class="mastery-fill skill-bar-fill" data-width="92%" style="background:linear-gradient(90deg,var(--accent),var(--primary))"></div></div>
+          <p class="mastery-sub">Custom stores, payment gateways, product types, subscriptions</p>
+        </div>
+        <div class="mastery-item glass reveal" style="transition-delay:.3s">
+          <div class="mastery-header">
+            <span class="mastery-name"><i class="fa-solid fa-gauge-high"></i>Performance Optimization</span>
+            <span class="mastery-pct">88%</span>
+          </div>
+          <div class="mastery-bar"><div class="mastery-fill skill-bar-fill" data-width="88%" style="background:linear-gradient(90deg,var(--primary),var(--secondary))"></div></div>
+          <p class="mastery-sub">Core Web Vitals, caching, CDN, image optimization, code splitting</p>
+        </div>
+      </div>
+
+      <div class="mastery-right">
+        <div class="mastery-item glass reveal" style="transition-delay:.1s">
+          <div class="mastery-header">
+            <span class="mastery-name"><i class="fab fa-js-square"></i>JavaScript / jQuery</span>
+            <span class="mastery-pct">82%</span>
+          </div>
+          <div class="mastery-bar"><div class="mastery-fill skill-bar-fill" data-width="82%" style="background:linear-gradient(90deg,var(--accent),var(--secondary))"></div></div>
+          <p class="mastery-sub">DOM manipulation, AJAX, custom Gutenberg blocks, vanilla JS</p>
+        </div>
+        <div class="mastery-item glass reveal" style="transition-delay:.2s">
+          <div class="mastery-header">
+            <span class="mastery-name"><i class="fa-solid fa-paint-brush"></i>Elementor / Page Builders</span>
+            <span class="mastery-pct">95%</span>
+          </div>
+          <div class="mastery-bar"><div class="mastery-fill skill-bar-fill" data-width="95%" style="background:linear-gradient(90deg,var(--primary),var(--accent))"></div></div>
+          <p class="mastery-sub">Custom widgets, dynamic content, advanced styling, pro features</p>
+        </div>
+        <div class="mastery-item glass reveal" style="transition-delay:.3s">
+          <div class="mastery-header">
+            <span class="mastery-name"><i class="fa-solid fa-code"></i>HTML5 / CSS3 / SCSS</span>
+            <span class="mastery-pct">90%</span>
+          </div>
+          <div class="mastery-bar"><div class="mastery-fill skill-bar-fill" data-width="90%" style="background:linear-gradient(90deg,var(--secondary),var(--accent))"></div></div>
+          <p class="mastery-sub">Responsive design, CSS Grid/Flexbox, animations, custom properties</p>
+        </div>
+        <div class="mastery-item glass reveal" style="transition-delay:.4s">
+          <div class="mastery-header">
+            <span class="mastery-name"><i class="fa-solid fa-robot"></i>AI-Enhanced Development</span>
+            <span class="mastery-pct">85%</span>
+          </div>
+          <div class="mastery-bar"><div class="mastery-fill skill-bar-fill" data-width="85%" style="background:linear-gradient(90deg,var(--primary),var(--secondary),var(--accent))"></div></div>
+          <p class="mastery-sub">AI-assisted coding, automated testing, intelligent content workflows</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tools & Technologies -->
+<section style="padding:0 5vw 100px">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">My Arsenal</span>
+      <h2 class="section-title">Tools & <span>Technologies</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="tools-mega">
+      <div class="tool-card glass hover-swipe glow-blue reveal" data-tilt>
+        <span class="tool-icon">🔵</span>
+        <div class="tool-name">WordPress</div>
+        <div class="tool-level">Core CMS</div>
+        <div class="tool-level-badge" style="background:rgba(0,102,255,0.15);color:var(--primary);border:1px solid rgba(0,102,255,0.3)">Expert</div>
+      </div>
+      <div class="tool-card glass reveal" data-tilt style="transition-delay:.05s">
+        <span class="tool-icon">🟣</span>
+        <div class="tool-name">PHP 8</div>
+        <div class="tool-level">Server Language</div>
+        <div class="tool-level-badge" style="background:rgba(123,47,255,0.15);color:var(--secondary);border:1px solid rgba(123,47,255,0.3)">Advanced</div>
+      </div>
+      <div class="tool-card glass reveal" data-tilt style="transition-delay:.1s">
+        <span class="tool-icon">🟡</span>
+        <div class="tool-name">JavaScript</div>
+        <div class="tool-level">Frontend</div>
+        <div class="tool-level-badge" style="background:rgba(0,255,204,0.1);color:var(--accent);border:1px solid rgba(0,255,204,0.25)">Advanced</div>
+      </div>
+      <div class="tool-card glass glow-cyan reveal" data-tilt style="transition-delay:.15s">
+        <span class="tool-icon">🛒</span>
+        <div class="tool-name">WooCommerce</div>
+        <div class="tool-level">eCommerce</div>
+        <div class="tool-level-badge" style="background:rgba(0,102,255,0.15);color:var(--primary);border:1px solid rgba(0,102,255,0.3)">Expert</div>
+      </div>
+      <div class="tool-card glass reveal" data-tilt style="transition-delay:.2s">
+        <span class="tool-icon">🎨</span>
+        <div class="tool-name">Elementor</div>
+        <div class="tool-level">Page Builder</div>
+        <div class="tool-level-badge" style="background:rgba(0,102,255,0.15);color:var(--primary);border:1px solid rgba(0,102,255,0.3)">Expert</div>
+      </div>
+      <div class="tool-card glass reveal" data-tilt style="transition-delay:.25s">
+        <span class="tool-icon">🗃️</span>
+        <div class="tool-name">MySQL</div>
+        <div class="tool-level">Database</div>
+        <div class="tool-level-badge" style="background:rgba(123,47,255,0.15);color:var(--secondary);border:1px solid rgba(123,47,255,0.3)">Advanced</div>
+      </div>
+      <div class="tool-card glass reveal" data-tilt style="transition-delay:.3s">
+        <span class="tool-icon">🔀</span>
+        <div class="tool-name">Git / GitHub</div>
+        <div class="tool-level">Version Control</div>
+        <div class="tool-level-badge" style="background:rgba(0,255,204,0.1);color:var(--accent);border:1px solid rgba(0,255,204,0.25)">Advanced</div>
+      </div>
+      <div class="tool-card glass reveal" data-tilt style="transition-delay:.35s">
+        <span class="tool-icon">📧</span>
+        <div class="tool-name">Contact Form 7</div>
+        <div class="tool-level">Forms & SMTP</div>
+        <div class="tool-level-badge" style="background:rgba(0,102,255,0.15);color:var(--primary);border:1px solid rgba(0,102,255,0.3)">Expert</div>
+      </div>
+      <div class="tool-card glass reveal" data-tilt style="transition-delay:.4s">
+        <span class="tool-icon">🔌</span>
+        <div class="tool-name">REST API</div>
+        <div class="tool-level">Integration</div>
+        <div class="tool-level-badge" style="background:rgba(123,47,255,0.15);color:var(--secondary);border:1px solid rgba(123,47,255,0.3)">Advanced</div>
+      </div>
+      <div class="tool-card glass reveal" data-tilt style="transition-delay:.45s">
+        <span class="tool-icon">⚙️</span>
+        <div class="tool-name">ACF Pro</div>
+        <div class="tool-level">Custom Fields</div>
+        <div class="tool-level-badge" style="background:rgba(0,102,255,0.15);color:var(--primary);border:1px solid rgba(0,102,255,0.3)">Expert</div>
+      </div>
+      <div class="tool-card glass reveal" data-tilt style="transition-delay:.5s">
+        <span class="tool-icon">🌐</span>
+        <div class="tool-name">WPML</div>
+        <div class="tool-level">Multilingual</div>
+        <div class="tool-level-badge" style="background:rgba(0,255,204,0.1);color:var(--accent);border:1px solid rgba(0,255,204,0.25)">Advanced</div>
+      </div>
+      <div class="tool-card glass reveal" data-tilt style="transition-delay:.55s">
+        <span class="tool-icon">🤖</span>
+        <div class="tool-name">AI Tools</div>
+        <div class="tool-level">Productivity</div>
+        <div class="tool-level-badge" style="background:rgba(0,102,255,0.15);color:var(--primary);border:1px solid rgba(0,102,255,0.3)">Proficient</div>
+      </div>
+    </div>
+
+    <!-- Tech chip scroll row -->
+    <div class="tech-grid reveal" style="margin-top:50px">
+      <div class="tech-chip glass">🎯 SEO Optimization</div>
+      <div class="tech-chip glass">⚡ Core Web Vitals</div>
+      <div class="tech-chip glass">🔒 Security Hardening</div>
+      <div class="tech-chip glass">📱 Responsive Design</div>
+      <div class="tech-chip glass">🚀 CDN Configuration</div>
+      <div class="tech-chip glass">💳 Payment Gateways</div>
+      <div class="tech-chip glass">📊 Google Analytics</div>
+      <div class="tech-chip glass">🔧 Custom Post Types</div>
+      <div class="tech-chip glass">🎣 Hooks & Filters</div>
+      <div class="tech-chip glass">📦 Plugin Architecture</div>
+    </div>
+  </div>
+</section>
+
+<!-- Soft Skills -->
+<section style="padding:0 5vw 100px">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">Beyond the Code</span>
+      <h2 class="section-title">Professional <span>Strengths</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="soft-grid">
+      <div class="soft-card glass reveal" data-tilt>
+        <span class="soft-icon">💬</span>
+        <h3 class="soft-title">Client Communication</h3>
+        <p class="soft-desc">Clear, jargon-free communication that keeps clients informed and confident throughout every project.</p>
+      </div>
+      <div class="soft-card glass reveal" data-tilt style="transition-delay:.1s">
+        <span class="soft-icon">🎯</span>
+        <h3 class="soft-title">Problem Solving</h3>
+        <p class="soft-desc">Analytical approach to complex WordPress challenges — I diagnose before I prescribe.</p>
+      </div>
+      <div class="soft-card glass reveal" data-tilt style="transition-delay:.2s">
+        <span class="soft-icon">⏱️</span>
+        <h3 class="soft-title">Deadline-Driven</h3>
+        <p class="soft-desc">Reliable delivery on time, every time. Meticulous project management keeps scope and timelines on track.</p>
+      </div>
+      <div class="soft-card glass reveal" data-tilt style="transition-delay:.3s">
+        <span class="soft-icon">📚</span>
+        <h3 class="soft-title">Continuous Learning</h3>
+        <p class="soft-desc">The web never stops evolving — neither do I. Always learning, always experimenting.</p>
+      </div>
+      <div class="soft-card glass reveal" data-tilt style="transition-delay:.4s">
+        <span class="soft-icon">🤝</span>
+        <h3 class="soft-title">Collaboration</h3>
+        <p class="soft-desc">Comfortable working solo or inside larger teams — designer, developer, and stakeholder alignment is my forte.</p>
+      </div>
+      <div class="soft-card glass reveal" data-tilt style="transition-delay:.5s">
+        <span class="soft-icon">🔍</span>
+        <h3 class="soft-title">Attention to Detail</h3>
+        <p class="soft-desc">From pixel-perfect layouts to security hardening — the details aren't extra, they're the whole point.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-box reveal">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h2>Like what you see? Let's put these skills to work for <span>your project.</span></h2>
+      <p>From custom plugins to enterprise builds — I bring the full stack of WordPress expertise to every engagement.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="projects.html" class="btn btn-primary"><i class="fa-solid fa-folder-open"></i> See Projects</a>
+      <a href="contact.html"  class="btn btn-glass"><i class="fa-solid fa-paper-plane"></i> Hire Me</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">DR.</a>
+    <div class="footer-links">
+      <a href="index.html">Home</a><a href="about.html">About</a>
+      <a href="skills.html">Skills</a><a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="social-links">
+      <a href="https://wordpress.org/support/users/darshitrajyaguru97/" class="social-link glass" target="_blank">
+        <i class="fab fa-wordpress" style="color:var(--primary)"></i>
+      </a>
+      <a href="mailto:darshitrajyaguru@gmail.com" class="social-link glass">
+        <i class="fa-solid fa-envelope" style="color:var(--accent)"></i>
+      </a>
+    </div>
+  </div>
+  <p class="footer-copy">© 2025 Darshit Rajyaguru · WordPress Expert & Core Contributor</p>
+</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
